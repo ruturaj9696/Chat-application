@@ -50,9 +50,36 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.send("Login route");
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!user || !isPasswordCorrect) {
+      return res.status(401).json({ message: "Invalid Credentials" });
+    }
+    // Create a JSON Web Token and send it as response along with the user's information
+    generateTokenAndSetCookie(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in signup controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 export const logout = (req, res) => {
-  res.send("Login route");
+  try {
+    res.cookie("jwt", "", { maxage: 0 });
+    res.status(200).json({
+      message: "logged out successfully !",
+    });
+  } catch (error) {
+    console.log("Error in signup controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };

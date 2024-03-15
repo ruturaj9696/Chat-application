@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-});
+  // Timestamp  for when the account was created and update
+}, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
 
