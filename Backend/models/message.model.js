@@ -5,20 +5,22 @@ const messageSchema = new mongoose.Schema(
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      requred: true,
+      required: true, 
     },
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      requred: true,
+      required: true, 
     },
     message: {
       type: String,
-      requred: true,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-const message = mongoose.Schema("Message", messageSchema);
-export default message;
+// Create the Message model using mongoose.model
+const Message = mongoose.model("Message", messageSchema);
+
+export default Message;
